@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AmbassadorController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\LinkController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,7 @@ Route::prefix('admin')->group(function () {
 
         Route::get('ambassadors', [AmbassadorController::class, 'index']);
         Route::get('users/{id}/links', [LinkController::class, 'index']);
+        Route::get('orders', [OrderController::class, 'index']);
 
         Route::apiResource('products', ProductController::class);
     });
