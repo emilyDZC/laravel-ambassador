@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateInfoRequest;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -52,7 +53,8 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return $request->user();
+        $user = $request->user();
+        return new UserResource($user);
     }
 
     public function logout()

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Order;
 
 /**
  * App\Models\User
@@ -63,6 +64,18 @@ class User extends Authenticatable
     public function scopeAdmins($query)
     {
         return $query->where('is_admin', 1);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function getRevenueAttribute()
+    {
+        return $this->orders->sum(function (Order $order) {
+            return $order->ambassador_revenue;
+        });
     }
 
 }
