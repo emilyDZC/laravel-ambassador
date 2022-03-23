@@ -74,7 +74,19 @@ class ProductController extends Controller
         }
         
         $total = $products->count();
-        
+
+        if ($sort = $request->input('sort')) {
+            if ($sort === 'asc') {
+                $products = $products->sortBy([
+                    fn($a, $b) => $a['price'] <=> $b['price']
+                ]);
+            } else if ($sort === 'desc') {
+                $products = $products->sortBy([
+                    fn($a, $b) => $b['price'] <=> $a['price']
+                ]);
+            }
+        }
+
         return [
             'data' => $products->forPage($page, 9)->values(),
             'meta' => [
