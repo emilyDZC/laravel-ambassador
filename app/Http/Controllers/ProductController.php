@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Events\ProductUpdatedEvent;
 use Str;
 
 class ProductController extends Controller
@@ -20,6 +21,8 @@ class ProductController extends Controller
     {
         $product = Product::Create($request->only('title', 'description', 'image', 'price'));
 
+        event(new ProductUpdatedEvent);
+
         return response($product, Response::HTTP_CREATED);
     }
 
@@ -34,6 +37,8 @@ class ProductController extends Controller
     {
         $product->update($request->only('title', 'description', 'image', 'price'));
 
+        event(new ProductUpdatedEvent);
+
         return response($product, Response::HTTP_ACCEPTED);
     }
 
@@ -41,6 +46,8 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+
+        event(new ProductUpdatedEvent);
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
@@ -51,7 +58,6 @@ class ProductController extends Controller
             return $products;
         };
 
-        sleep(2);
         $products = Product::all();
 
         \Cache::set('products_frontend', $products, 30*60); // 30 min

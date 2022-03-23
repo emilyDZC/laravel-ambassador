@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Link;
 use App\Models\Order;
+use App\Models\User;
+use Illuminate\Support\Facades\Redis;
 
 class StatsController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request) 
+    {
         $user = $request->user();
 
         $links = Link::whereUserId($user->id)->get();
@@ -24,5 +27,10 @@ class StatsController extends Controller
                 })
             ];
         });
+    }
+
+    public function rankings() 
+    {
+        return Redis::zrevrange('rankings', 0, -1, 'WITHSCORES');
     }
 }
