@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Product;
+use App\Models\LinkProduct;
+use App\Models\Order;
 
 /**
  * App\Models\Link
@@ -35,5 +38,15 @@ class Link extends Model
     public function user()
     {
         return $this->belongsTo(User::Class);
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, LinkProduct::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'code', 'code')->where('complete', 1);
     }
 }

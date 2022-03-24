@@ -11,7 +11,9 @@ class LinkController extends Controller
 {
     public function index($id)
     {
-        return Link::whereUserId($id)->get();
+        $links = Link::with('orders')->whereUserId($id)->get();
+
+        return LinkResource::collection($links);
     }
 
     public function store(Request $request)
@@ -29,5 +31,9 @@ class LinkController extends Controller
         }
 
         return $link;
+    }
+
+    public function show($code) {
+        return Link::with('user', 'products')->where('code', $code)->first();
     }
 }
